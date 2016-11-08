@@ -43,3 +43,13 @@ murray.m
 smith.m
 williams.t
 ```
+
+###Invoke-EmailAddressMangler Options
+```
+FirstNamesList       - A list of first names one per line.
+LastNamesList        - A list of last names one per line.
+SimpleMergeList      - A list of full names one per line in the format 'firstname lastname'. If this option is specified the tool will simple merge the names together as opposed to mangling all possible combinations.
+Domain               -The domain to append to each email address. If the -Domain option is not specified a username list will be generated.
+AddressConvention    - The email address or username naming convention. fn=firstname, ln=lastname, fi=fistinitial, li=lastinitial The following are acceptable formats: fnln, fn-ln, fn.ln, filn, fi-ln, fi.ln, fnli, fn-li, fn.li, lnfn, ln-fn, ln.fn, lifn, li-fn, li.fn, lnfi, ln-fi, ln.fi fn, ln.
+
+```
