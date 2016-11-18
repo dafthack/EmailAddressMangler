@@ -1,5 +1,6 @@
 ﻿###
 ### Basic sanity check to ensure that, given the same inputs, we get the same output
+### Will output any differences in the result files, so no output is a good result.
 ###
 
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
