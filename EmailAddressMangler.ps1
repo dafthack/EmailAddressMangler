@@ -77,7 +77,6 @@
     $FNameArray = @()
     $LNameArray = @()
     $FullUserList = @()
-    
 
     #Simple merged list basically just takes a list of full names (first last) one per line and merges them together in the specified format.
     if ($SimpleMergeList -ne "")
@@ -703,4 +702,34 @@
     }
     $FullUserList = $FullUserList | sort | Get-Unique
     Write-Output $FullUserList
+}
+
+$Conventions = @{
+    "fnln" = { Param($fn, $ln) "$fn$ln" };
+    "fn-ln" = { Param($fn, $ln) "$fn-$ln" };
+    "fn.ln" = { Param($fn, $ln) "$fn.$ln" };
+
+    "filn" = { Param($fn, $ln) $fn[0] + $ln };
+    "fi-ln" = { Param($fn, $ln) $fn[0] + "-" + $ln };
+    "fi.ln" = { Param($fn, $ln) $fn[0] + "." + $ln };
+
+    "fnli" = { Param($fn, $ln) $fn + $ln[0] };
+    "fn-li" = { Param($fn, $ln) $fn + "-" + $ln[0] };
+    "fn.li" = { Param($fn, $ln) $fn + "." + $ln[0] };
+
+    "lnfn" = { Param($fn, $ln) $ln + $fn };
+    "ln-fn" = { Param($fn, $ln) $ln + "-" + $fn };
+    "ln.fn" = { Param($fn, $ln) $ln + "." + $fn };
+
+    "lifn" = { Param($fn, $ln) $ln[0] + $fn };
+    "li-fn" = { Param($fn, $ln) $ln[0] + "-" + $fn };
+    "li.fn" = { Param($fn, $ln) $ln[0] + "." + $fn };
+    
+    "fn" = { Param($fn, $ln) $fn };
+    "ln" = { Param($fn, $ln) $ln };
+}
+
+function Format($Convention, [String]$FirstName, [String]$LastName)
+{
+    return (& $Conventions[$Convention] $FirstName.ToLower() $LastName.ToLower())
 }
