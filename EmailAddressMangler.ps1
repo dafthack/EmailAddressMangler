@@ -77,7 +77,6 @@
     $FNameArray = @()
     $LNameArray = @()
     $FullUserList = @()
-    
 
     #Simple merged list basically just takes a list of full names (first last) one per line and merges them together in the specified format.
     if ($SimpleMergeList -ne "")
@@ -105,142 +104,8 @@
                     $fname = $fullname
                     $lname = $fullname
                 } 
-                if($AddressConvention -eq "fnln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$fname$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "fn.ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$fname.$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "fn-ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$fname-$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "filn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$finit$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "fi-ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$finit-$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "fi.ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$finit.$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "fnli")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$fname$linit@$Domain"
-                }
-                elseif($AddressConvention -eq "fn-li")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$fname-$linit@$Domain"
-                }
-                elseif($AddressConvention -eq "fn.li")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$fname.$linit@$Domain"
-                }
-                elseif($AddressConvention -eq "fn")
-                {
-                    $fname = $fname.ToLower()
-                    $FullUserList += "$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "ln")
-                {
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname@$Domain"
-                }
-                elseif($AddressConvention -eq "lnfn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "ln.fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname.$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "ln-fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname-$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "lifn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$linit$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "li-fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$linit-$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "li.fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$linit.$fname@$Domain"
-                }
-                elseif($AddressConvention -eq "lnfi")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$lname$finit@$Domain"
-                }
-                elseif($AddressConvention -eq "ln-fi")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$lname-$finit@$Domain"
-                }
-                elseif($AddressConvention -eq "ln.fi")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$lname.$finit@$Domain"
-                }
-                else
-                {
-                Write-Host -ForegroundColor "red" "[*] Please enter an email address naming convention with the -AddressConvention flag."
-                Write-Host -ForegroundColor "red" "[*] Accepted formats include fnln, filn, fn.ln, fn etc. where fn = first name, ln = last name, fi = first initial, and li = last initial."
-                return
-                }
+                
+                $FullUserList += Format -Convention $AddressConvention -FirstName $fname -LastName $lname
             }
         }
         else
@@ -257,143 +122,9 @@
                 {
                     $fname = $fullname
                     $lname = $fullname
-                } 
-                if($AddressConvention -eq "fnln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$fname$lname"
                 }
-                elseif($AddressConvention -eq "fn.ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$fname.$lname"
-                }
-                elseif($AddressConvention -eq "fn-ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$fname-$lname"
-                }
-                elseif($AddressConvention -eq "filn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$finit$lname"
-                }
-                elseif($AddressConvention -eq "fi-ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$finit-$lname"
-                }
-                elseif($AddressConvention -eq "fi.ln")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$finit.$lname"
-                }
-                elseif($AddressConvention -eq "fnli")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$fname$linit"
-                }
-                elseif($AddressConvention -eq "fn-li")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$fname-$linit"
-                }
-                elseif($AddressConvention -eq "fn.li")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$fname.$linit"
-                }
-                elseif($AddressConvention -eq "fn")
-                {
-                    $fname = $fname.ToLower()
-                    $FullUserList += "$fname"
-                }
-                elseif($AddressConvention -eq "ln")
-                {
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname"
-                }
-                elseif($AddressConvention -eq "lnfn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname$fname"
-                }
-                elseif($AddressConvention -eq "ln.fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname.$fname"
-                }
-                elseif($AddressConvention -eq "ln-fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $FullUserList += "$lname-$fname"
-                }
-                elseif($AddressConvention -eq "lifn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$linit$fname"
-                }
-                elseif($AddressConvention -eq "li-fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$linit-$fname"
-                }
-                elseif($AddressConvention -eq "li.fn")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $linit = $lname.Substring(0,1)
-                    $FullUserList += "$linit.$fname"
-                }
-                elseif($AddressConvention -eq "lnfi")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$lname$finit"
-                }
-                elseif($AddressConvention -eq "ln-fi")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$lname-$finit"
-                }
-                elseif($AddressConvention -eq "ln.fi")
-                {
-                    $fname = $fname.ToLower()
-                    $lname = $lname.ToLower()
-                    $finit = $fname.Substring(0,1)
-                    $FullUserList += "$lname.$finit"
-                }
-                else
-                {
-                Write-Host -ForegroundColor "red" "[*] Please enter an email address naming convention with the -AddressConvention flag."
-                Write-Host -ForegroundColor "red" "[*] Accepted formats include fnln, filn, fn.ln, fn etc. where fn = first name, ln = last name, fi = first initial, and li = last initial."
-                return
-                }
+
+                $FullUserList += Format -Convention $AddressConvention -FirstName $fname -LastName $lname
             }  
         }
     }
@@ -414,146 +145,10 @@
         foreach($fname in $FNameArray)
         {
             if ($Domain -ne "")
-            {
-            
+            {            
                 foreach($lname in $LNameArray)
                 {
-                    if($AddressConvention -eq "fnln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$fname$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fn.ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$fname.$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fn-ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$fname-$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "filn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$finit$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fi-ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$finit-$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fi.ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$finit.$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fnli")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$fname$linit@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fn-li")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$fname-$linit@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fn.li")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$fname.$linit@$Domain"
-                    }
-                    elseif($AddressConvention -eq "fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $FullUserList += "$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "ln")
-                    {
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "lnfn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "ln.fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname.$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "ln-fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname-$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "lifn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$linit$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "li-fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$linit-$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "li.fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$linit.$fname@$Domain"
-                    }
-                    elseif($AddressConvention -eq "lnfi")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$lname$finit@$Domain"
-                    }
-                    elseif($AddressConvention -eq "ln-fi")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$lname-$finit@$Domain"
-                    }
-                    elseif($AddressConvention -eq "ln.fi")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$lname.$finit@$Domain"
-                    }
-                    else
-                    {
-                    Write-Host -ForegroundColor "red" "[*] Please enter an email address naming convention with the -AddressConvention flag."
-                    Write-Host -ForegroundColor "red" "[*] Accepted formats include fnln, filn, fn.ln, fn etc. where fn = first name, ln = last name, fi = first initial, and li = last initial."
-                    return
-                    }
+                    $FullUserList += (Format -Convention $AddressConvention -FirstName $fname -LastName $lname) + "@$Domain"
                 }
             }
             else
@@ -561,146 +156,45 @@
                 #If no domain is selected it just creates a username list
                 foreach($lname in $LNameArray)
                 {
-                    if($AddressConvention -eq "fnln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$fname$lname"
-                    }
-                    elseif($AddressConvention -eq "fn.ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$fname.$lname"
-                    }
-                    elseif($AddressConvention -eq "fn-ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$fname-$lname"
-                    }
-                    elseif($AddressConvention -eq "filn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$finit$lname"
-                    }
-                    elseif($AddressConvention -eq "fi-ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$finit-$lname"
-                    }
-                    elseif($AddressConvention -eq "fi.ln")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$finit.$lname"
-                    }
-                    elseif($AddressConvention -eq "fnli")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$fname$linit"
-                    }
-                    elseif($AddressConvention -eq "fn-li")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$fname-$linit"
-                    }
-                    elseif($AddressConvention -eq "fn.li")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$fname.$linit"
-                    }
-                    elseif($AddressConvention -eq "fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $FullUserList += "$fname"
-                    }
-                    elseif($AddressConvention -eq "ln")
-                    {
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname"
-                    }
-                    elseif($AddressConvention -eq "lnfn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname$fname"
-                    }
-                    elseif($AddressConvention -eq "ln.fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname.$fname"
-                    }
-                    elseif($AddressConvention -eq "ln-fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $FullUserList += "$lname-$fname"
-                    }
-                    elseif($AddressConvention -eq "lifn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$linit$fname"
-                    }
-                    elseif($AddressConvention -eq "li-fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$linit-$fname"
-                    }
-                    elseif($AddressConvention -eq "li.fn")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $linit = $lname.Substring(0,1)
-                        $FullUserList += "$linit.$fname"
-                    }
-                    elseif($AddressConvention -eq "lnfi")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$lname$finit"
-                    }
-                    elseif($AddressConvention -eq "ln-fi")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$lname-$finit"
-                    }
-                    elseif($AddressConvention -eq "ln.fi")
-                    {
-                        $fname = $fname.ToLower()
-                        $lname = $lname.ToLower()
-                        $finit = $fname.Substring(0,1)
-                        $FullUserList += "$lname.$finit"
-                    }
-                    else
-                    {
-                    Write-Host -ForegroundColor "red" "[*] Please enter an email address naming convention with the -AddressConvention flag."
-                    Write-Host -ForegroundColor "red" "[*] Accepted formats include fnln, filn, fn.ln, fn etc. where fn = first name, ln = last name, fi = first initial, and li = last initial."
-                    return
-                    }
+                    $FullUserList += Format -Convention $AddressConvention -FirstName $fname -LastName $lname
                 }
             }
         }
     }
     $FullUserList = $FullUserList | sort | Get-Unique
     Write-Output $FullUserList
+}
+
+$Conventions = @{
+    "fnln" = { Param($fn, $ln) "$fn$ln" };
+    "fn-ln" = { Param($fn, $ln) "$fn-$ln" };
+    "fn.ln" = { Param($fn, $ln) "$fn.$ln" };
+
+    "filn" = { Param($fn, $ln) $fn[0] + $ln };
+    "fi-ln" = { Param($fn, $ln) $fn[0] + "-" + $ln };
+    "fi.ln" = { Param($fn, $ln) $fn[0] + "." + $ln };
+
+    "fnli" = { Param($fn, $ln) $fn + $ln[0] };
+    "fn-li" = { Param($fn, $ln) $fn + "-" + $ln[0] };
+    "fn.li" = { Param($fn, $ln) $fn + "." + $ln[0] };
+
+    "lnfn" = { Param($fn, $ln) $ln + $fn };
+    "ln-fn" = { Param($fn, $ln) $ln + "-" + $fn };
+    "ln.fn" = { Param($fn, $ln) $ln + "." + $fn };
+
+    "lifn" = { Param($fn, $ln) $ln[0] + $fn };
+    "li-fn" = { Param($fn, $ln) $ln[0] + "-" + $fn };
+    "li.fn" = { Param($fn, $ln) $ln[0] + "." + $fn };
+
+    "lnfi" = { Param($fn, $ln) $ln + $fn[0] };
+    "ln-fi" = { Param($fn, $ln) $ln + "-" + $fn[0] };
+    "ln.fi" = { Param($fn, $ln) $ln + "." + $fn[0] };
+
+    "fn" = { Param($fn, $ln) $fn };
+    "ln" = { Param($fn, $ln) $ln };
+}
+
+function Format($Convention, [String]$FirstName, [String]$LastName)
+{
+    return (& $Conventions[$Convention] $FirstName.ToLower() $LastName.ToLower())
 }

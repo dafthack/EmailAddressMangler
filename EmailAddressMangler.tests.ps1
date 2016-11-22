@@ -5,17 +5,22 @@
 
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-$ResultFile = "EmailAddresses.result.txt"
-
-$ApprovedFile = "EmailAddresses.approved.txt"
+$OutputFolder = Join-Path $Here "test-results"
 
 Import-Module $Here\EmailAddressMangler.ps1
 
-Invoke-EmailAddressMangler `
-    -FirstNamesList .\namelists\top_100_male_female_first_names.txt `
-    -LastNamesList .\namelists\top_100_last_names.txt `
-    -AddressConvention fnli `
-    -Domain testing.com `
-    | Out-File -Encoding ascii $ResultFile
+foreach($Convention in $Conventions.Keys)
+{
+    $ResultFile = "$OutputFolder\$Convention.result.txt"
 
-Compare-Object (Get-Content $ApprovedFile) (Get-Content $ResultFile)
+    $ApprovedFile = "$OutputFolder\$Convention.approved.txt"
+
+    Invoke-EmailAddressMangler `
+        -FirstNamesList .\namelists\top_100_male_female_first_names.txt `
+        -LastNamesList .\namelists\top_100_last_names.txt `
+        -AddressConvention $Convention `
+        -Domain testing.com `
+        | Out-File -Encoding ascii $ResultFile
+
+    Compare-Object (Get-Content $ApprovedFile) (Get-Content $ResultFile)
+}
