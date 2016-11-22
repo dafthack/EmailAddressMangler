@@ -22,5 +22,5 @@ foreach($Convention in $Conventions.Keys)
         -Domain testing.com `
         | Out-File -Encoding ascii $ResultFile
 
-    # Compare-Object (Get-Content $ApprovedFile) (Get-Content $ResultFile)
+    Compare-Object (Get-Content $ApprovedFile) (Get-Content $ResultFile)
 }
