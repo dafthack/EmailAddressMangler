@@ -185,7 +185,11 @@ $Conventions = @{
     "lifn" = { Param($fn, $ln) $ln[0] + $fn };
     "li-fn" = { Param($fn, $ln) $ln[0] + "-" + $fn };
     "li.fn" = { Param($fn, $ln) $ln[0] + "." + $fn };
-    
+
+    "lnfi" = { Param($fn, $ln) $ln + $fn[0] };
+    "ln-fi" = { Param($fn, $ln) $ln + "-" + $fn[0] };
+    "ln.fi" = { Param($fn, $ln) $ln + "." + $fn[0] };
+
     "fn" = { Param($fn, $ln) $fn };
     "ln" = { Param($fn, $ln) $ln };
 }
