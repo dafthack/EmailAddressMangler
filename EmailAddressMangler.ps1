@@ -69,7 +69,11 @@
 
      [Parameter(Position = 4, Mandatory = $false)]
      [string]
-     $AddressConvention = ""
+     $AddressConvention = "",
+
+     [Parameter(Position = 5, Mandatory = $false)]
+     [switch]
+     $AllCombos = $false
 
     )
 
@@ -123,7 +127,7 @@
                     $fname = $fullname
                     $lname = $fullname
                 }
-
+                
                 $FullUserList += Format -Convention $AddressConvention -FirstName $fname -LastName $lname
             }  
         }
@@ -142,21 +146,52 @@
         {
             Write-Host -foregroundcolor "yellow" "[*] Now generating the mangled username list. Please wait..."
         }
-        foreach($fname in $FNameArray)
+        if($AllCombos)
         {
-            if ($Domain -ne "")
-            {            
-                foreach($lname in $LNameArray)
+            
+            foreach($addcon in $alladdcons)
+            {
+                Write-Output "Now working on address convention $addcon."
+                foreach($fname in $FNameArray)
                 {
-                    $FullUserList += (Format -Convention $AddressConvention -FirstName $fname -LastName $lname) + "@$Domain"
+                    if ($Domain -ne "")
+                    {            
+                        foreach($lname in $LNameArray)
+                        {                                                               
+                            $FullUserList += (Format -Convention $addcon -FirstName $fname -LastName $lname) + "@$Domain"                           
+
+                        }
+                    }
+                    else
+                    {
+                        #If no domain is selected it just creates a username list
+                        foreach($lname in $LNameArray)
+                        {
+                            $FullUserList += Format -Convention $addcon -FirstName $fname -LastName $lname
+                        }
+                    }
                 }
             }
-            else
+        }
+        else
+        {
+        foreach($fname in $FNameArray)
             {
-                #If no domain is selected it just creates a username list
-                foreach($lname in $LNameArray)
+                if ($Domain -ne "")
+                {            
+                    foreach($lname in $LNameArray)
+                    {                      
+                    $FullUserList += (Format -Convention $AddressConvention -FirstName $fname -LastName $lname) + "@$Domain"
+                    }
+                    
+                }
+                else
                 {
-                    $FullUserList += Format -Convention $AddressConvention -FirstName $fname -LastName $lname
+                    #If no domain is selected it just creates a username list
+                    foreach($lname in $LNameArray)
+                    {
+                        $FullUserList += Format -Convention $AddressConvention -FirstName $fname -LastName $lname
+                    }
                 }
             }
         }
@@ -164,6 +199,7 @@
     $FullUserList = $FullUserList | sort | Get-Unique
     Write-Output $FullUserList
 }
+$alladdcons ="fnln","fn-ln","fn.ln","filn","fi-ln","fi.ln","fnli","fn-li","fn.li","lnfn","ln-fn","ln.fn","lifn","li-fn","li.fn","lnfi","ln-fi","ln.fi","fn","ln"
 
 $Conventions = @{
     "fnln" = { Param($fn, $ln) "$fn$ln" };
